@@ -20,18 +20,18 @@
         <script src="http://maps.google.com/maps/api/js"></script>
     </head>
     <body>
-    <!--[if lt IE 10]>
-        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+        <!--[if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
 
        
 
-            <div class="gmap-wrapper" id="gmap"></div>
-            <div class="place-wrapper" id="place-wrapper">
-                <ul class="places-list" data-bind="foreach: initialPlaces">
-                    <li class="place-item" data-bind="text: name"></li>
-                </ul>
-            </div>
+        <div class="gmap-wrapper" id="gmap"></div>
+        <div class="place-wrapper" id="place-wrapper">
+            <ul class="places-list" data-bind="foreach: initialPlaces">
+                <li class="place-item" data-bind="text: name, click: $parent.selectPlace"></li>
+            </ul>
+        </div>
 
         
 
