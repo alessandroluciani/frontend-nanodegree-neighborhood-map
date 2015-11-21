@@ -1,0 +1,11 @@
+html,body,.container-fluid
+{
+    height:100%;
+}
+
+.container-fluid
+{
+    display:table;
+    width: 100%;
+    background-color: green;
+}
