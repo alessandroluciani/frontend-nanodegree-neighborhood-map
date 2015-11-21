@@ -7,4 +7,4 @@ Steps building
 - - Bootstrap always with me :)
 - Integrated Knockdown.js via bower
 - Cleaned from yeoman pre boiled code
--  
+- 
