@@ -5,7 +5,7 @@
         <title>Frontend NanoDegree | Neighborhood Map</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,300,700|Trocchi' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="/favicon.ico">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
@@ -16,22 +16,41 @@
         <!-- endbuild -->
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
         <!-- endbuild -->
-        <script src="http://maps.google.com/maps/api/js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFdc00PHJOMNK-riXpOLCIbpLHRz6z5Ck&libraries=places"></script>
     </head>
     <body>
+
         <!--[if lt IE 10]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-       
+    
+        <div class="gmap-wrapper" id="map-canvas"></div>
 
-        <div class="gmap-wrapper" id="gmap"></div>
-        <div class="place-wrapper" id="place-wrapper">
-            <ul class="places-list" data-bind="foreach: initialPlaces">
-                <li class="place-item" data-bind="text: name, click: $parent.selectPlace"></li>
-            </ul>
-        </div>
+
+        <form class='search' data-bind="submit: search">
+            <input class="search-bar" data-bind="value: query" placeholder="Filter results by name or type" autofocus></input>
+            <button class="search-button" type="submit">
+                <i class="fa fa-search fa-2x fa-inverse"></i>
+            </button>
+        </form>
+
+
+        <button class="list-toggle" data-bind="click: toggleListDisplay,css: {'small-list-toggle': !displayingList() }"><i data-bind="css: {'fa-minus-square': displayingList(),'fa-plus-square': !displayingList() }" class="fa fa-2x fa-inverse"></i></button>
+
+
+        <ul class="filtered-places" data-bind="visible: filteredPlaces().length, foreach: {data: filteredPlaces, as: 'place'}, css: {'list-view-hidden': !displayingList()}">
+            <li class="place" data-bind="click: function() { $root.selectPlace(place); }, css: {'chosen-place': $data === $root.chosenPlace()}, attr: { id: place.id }">
+                <div class="place-info">
+                    <h4 data-bind="text: place.name"></h4>
+                    <p data-bind="text: place.vicinity"></p>
+                </div>
+            </li>
+        </ul>
+
+        <div class="no-results" data-bind="visible: filteredPlaces().length === 0, css: {'list-view-hidden': !displayingList()}">No results matched</div>
 
         
 
