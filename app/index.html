@@ -26,9 +26,7 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-    
         <div class="gmap-wrapper" id="map-canvas"></div>
-
 
         <form class='search' data-bind="submit: search">
             <input class="search-bar" data-bind="value: query" placeholder="Filter results by name or type" autofocus></input>
@@ -37,9 +35,7 @@
             </button>
         </form>
 
-
         <button class="list-toggle" data-bind="click: toggleListDisplay,css: {'small-list-toggle': !displayingList() }"><i data-bind="css: {'fa-minus-square': displayingList(),'fa-plus-square': !displayingList() }" class="fa fa-2x fa-inverse"></i></button>
-
 
         <ul class="filtered-places" data-bind="visible: filteredPlaces().length, foreach: {data: filteredPlaces, as: 'place'}, css: {'list-view-hidden': !displayingList()}">
             <li class="place" data-bind="click: function() { $root.selectPlace(place); }, css: {'chosen-place': $data === $root.chosenPlace()}, attr: { id: place.id }">
@@ -52,8 +48,6 @@
 
         <div class="no-results" data-bind="visible: filteredPlaces().length === 0, css: {'list-view-hidden': !displayingList()}">No results matched</div>
 
-        
-
         <!-- build:js(.) scripts/vendor.js -->
         <!-- bower:js -->
         <script src="/bower_components/jquery/dist/jquery.js"></script>
@@ -61,7 +55,6 @@
         <!-- endbower -->
         <!-- endbuild -->
 
-    
         <!-- build:js(.) scripts/plugins.js -->
         <script src="/bower_components/bootstrap/js/affix.js"></script>
         <script src="/bower_components/bootstrap/js/alert.js"></script>
@@ -77,9 +70,7 @@
         <script src="/bower_components/bootstrap/js/tab.js"></script>
         <!-- endbuild -->
 
-   
         <!-- build:js scripts/main.js -->
-        
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
 

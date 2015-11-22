@@ -1,4 +1,3 @@
-/* Basic Styles */
 * {
   margin: 0;
   padding: 0;
@@ -41,13 +40,11 @@ h4 {
   text-decoration: underline;
 }
 
-/* General Classes */
 .center-x {
   left: 50%;
   transform: translateX(-50%);
 }
 
-/* Map View Classes */
 .search {
   z-index: 100;
   position: fixed;
@@ -168,7 +165,6 @@ h4 {
   width: 215px;
 }
 
-
 .small-list-toggle {
   width: 50px !important;
 }
@@ -176,39 +172,6 @@ h4 {
 .list-view-hidden {
   transform: translateX(100%) !important;
 }
-
-/* Photo Gallery Classes */
-.backdrop {
-  z-index: 8000;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  font-family: 'Trocchi', serif;
-  color: white;
-}
-
-
-.close {
-  position: fixed;
-  z-index: 200;
-  color: white;
-  opacity: 0.5;
-  transition: 0.2s;
-}
-
-.close:hover {
-  opacity: 1;
-}
-
-
-.close {
-  top: 5px;
-  right: 10px;
-}
-
 
 /* Media Queries */
 @media (max-width: 450px) {
