@@ -1,3 +1,4 @@
+/* Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -40,11 +41,13 @@ h4 {
   text-decoration: underline;
 }
 
+/* Main View Classes */
 .center-x {
   left: 50%;
   transform: translateX(-50%);
 }
 
+/* Search bar block */
 .search {
   z-index: 100;
   position: fixed;
@@ -88,6 +91,8 @@ h4 {
   outline: 0;
   border-radius: 0 5px 5px 0;
 }
+
+/* List display block */
 
 .search-button:hover,
 .list-toggle:hover {
@@ -160,6 +165,7 @@ h4 {
   transition: 0.2s;
 }
 
+/* infoHtml block */
 .infowindow {
   height: 110px;
   width: 200px;

@@ -6,8 +6,10 @@ var ViewModel = function() {
         bounds,
         service;
    
+    //Here I insert all places via observableArray (ko) 
     self.allPlaces = ko.observableArray([]);
 
+    //Initialize Google Map
     this.initialize = function() {
     	rome = new google.maps.LatLng(41.896046, 12.476709);
     	map = new google.maps.Map(document.getElementById('map-canvas'), {
@@ -18,6 +20,7 @@ var ViewModel = function() {
         this.getAllPlaces();
     };
 
+    //Get all Places via google service
     this.getAllPlaces = function(){
     	var request = {
             location: rome,
@@ -29,6 +32,7 @@ var ViewModel = function() {
         service.nearbySearch(request, this.getAllPlacesCallback);
     };
 
+    //Callback for getAllPlaces and call method createMarker
     this.getAllPlacesCallback = function(results, status) {
     	if (status == google.maps.places.PlacesServiceStatus.OK) 
     	{
@@ -37,6 +41,7 @@ var ViewModel = function() {
     		{
     			place.marker = self.createMarker(place);
     			place.isInFilteredList = ko.observable(true);
+                //push each place inside an observableArray (ko)
                 self.allPlaces.push(place);
                 bounds.extend(new google.maps.LatLng(place.geometry.location.lat(),place.geometry.location.lng()));
     		});
@@ -44,11 +49,13 @@ var ViewModel = function() {
 	    }
     };
 
+    //the marker creation
     this.createMarker = function(place) {
     	var marker = new google.maps.Marker({
             map: map,
             position: place.geometry.location,
         });
+        //create click event via google trigger
         google.maps.event.addListener(marker, 'click', function () {
             document.getElementById(place.id).scrollIntoView();
             $('#' + place.id).trigger('click');
@@ -56,34 +63,41 @@ var ViewModel = function() {
         return marker;
     };
 
+    //used for infoHtml creation
     this.getStreet = function(address) {
         var firstComma = address.indexOf(',');
         var street = address.slice(0, firstComma) + '.';
         return street;
     };
 
+    //used for infoHtml creation
     this.getCityState = function(address) {
         var firstComma = address.indexOf(',');
         var cityState = address.slice(firstComma + 1);
-        cityState = cityState.replace(', United States', '');
+        cityState = cityState.replace(', Italy', '');
         return cityState;
     };
 
-    self.allPlaces = ko.observableArray([]);
 
+    //filter for search bar under computed observable (ko)
     self.filteredPlaces = ko.computed(function () {
         return self.allPlaces().filter(function (place) {
             return place.isInFilteredList();
         });
     });
 
+    //Observable for current place 
     self.chosenPlace = ko.observable();
+    //Observable for input text value
     self.query = ko.observable('');
 
+    
+    //Observable for current place 
     self.searchTerms = ko.computed(function () {
         return self.query().toLowerCase().split(' ');
     });
 
+    //method for the search in the listView and for markers
     self.search = function () {
         self.chosenPlace(null);
         infowindow.setMap(null);
@@ -102,6 +116,7 @@ var ViewModel = function() {
         });
     };
 
+    //method for the place selected
     self.selectPlace = function (place) {
         if (place === self.chosenPlace()) {
             self.displayInfo(place);
@@ -115,8 +130,10 @@ var ViewModel = function() {
         }
     };
 
+    //observable for the list of places
     self.displayingList = ko.observable(true);
 
+    //computed observable for the icon in the toggle list via font-awesome
     self.listToggleIcon = ko.computed(function () {
         if (self.displayingList()) {
             return 'fa fa-minus-square fa-2x fa-inverse';
@@ -124,6 +141,7 @@ var ViewModel = function() {
         return 'fa fa-plus-square fa-2x fa-inverse'
     });
 
+    //cmethod for the toggle list of places
     self.toggleListDisplay = function () {
         if (self.displayingList()) {
             self.displayingList(false);
@@ -132,6 +150,7 @@ var ViewModel = function() {
         }
     };
 
+    //method for display infoHtml
     self.displayInfo = function (place) {
 
         var request = {
@@ -163,6 +182,7 @@ var ViewModel = function() {
             infowindow.setContent(content);
             infowindow.open(map, place.marker);
 
+            //get streetView from google and put inside infoHtml
             var panorama = new google.maps.StreetViewPanorama(
                 document.getElementById('street-view'),
                 {
@@ -171,21 +191,26 @@ var ViewModel = function() {
                     zoom: 1
             });
 
+            //Movement for gmap
             map.panTo(place.marker.position);
         })
     };
 
+    //main starter
     this.initialize();
 
+    //trigger for best positioning of gmap
     window.addEventListener('resize', function (e) {
         map.fitBounds(bounds);
     });
 
+    //listener for infoHtml closure 
     google.maps.event.addListener(infowindow,'closeclick',function(){
         self.chosenPlace().marker.setAnimation(null);
         self.chosenPlace(null);
     });
 
+    //for little screens
     $(function () {
         if ($(window).width() < 650) {
             if (self.displayingList()) {
@@ -195,4 +220,5 @@ var ViewModel = function() {
     }());
 };
 
+//ko binding to viewModel
 ko.applyBindings(new ViewModel());
