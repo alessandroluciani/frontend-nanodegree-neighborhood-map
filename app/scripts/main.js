@@ -110,7 +110,6 @@ var ViewModel = function() {
                 result.marker.setAnimation(null);
             });
             self.chosenPlace(place);
-            self.chosenPhotoIndex(0);
             place.marker.setAnimation(google.maps.Animation.BOUNCE);
             self.displayInfo(place);
         }
@@ -133,12 +132,12 @@ var ViewModel = function() {
         }
     };
 
-    self.chosenPhotoIndex = ko.observable(0);
-
     self.displayInfo = function (place) {
+
         var request = {
             placeId: place.place_id
         };
+
         service.getDetails(request, function (details, status) {
             var locName = '<h4>' + place.name + '</h4>';
             var locStreet = '';
@@ -147,8 +146,7 @@ var ViewModel = function() {
         
             if (status == google.maps.places.PlacesServiceStatus.OK) {
                 if (details.website) {
-                    locName = '<h4><a target="_blank" href=' + details.website +
-                        '>' + place.name + '</a></h4>';
+                    locName = '<h4><a target="_blank" href=' + details.website + '>' + place.name + '</a></h4>';
                 }
                 if (details.formatted_phone_number) {
                     locPhone = '<p>' + details.formatted_phone_number + '</p>';
@@ -160,10 +158,19 @@ var ViewModel = function() {
                         details.formatted_address) + '<p>';
                 } 
             }
-            var content = '<div class="infowindow">' + locName + locStreet +
-                locCityState + locPhone + '</div>';
+            var content = '<div class="streetview" id="street-view"></div><div class="infowindow">' + locName + locStreet + locCityState + locPhone + '</div>';
+
             infowindow.setContent(content);
             infowindow.open(map, place.marker);
+
+            var panorama = new google.maps.StreetViewPanorama(
+                document.getElementById('street-view'),
+                {
+                    position: {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()},
+                    pov: {heading: 165, pitch: 0},
+                    zoom: 1
+            });
+
             map.panTo(place.marker.position);
         })
     };
