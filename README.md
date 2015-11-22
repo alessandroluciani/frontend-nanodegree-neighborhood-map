@@ -1,7 +1,9 @@
 # P5 FrontEnd NanoDegree Neighborhood Map
 
 Live version on: http://alessandroluciani.github.io/p5/
+
 City: Rome
+
 District: Center of Town
 
   - City: Rome (Italy)
@@ -15,4 +17,4 @@ District: Center of Town
   - Filter Box Search
   - Scaffolded via Yeoman generator-webapp
   - Css Styled
-  - Font-awesome for icons
+
