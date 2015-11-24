@@ -25,7 +25,7 @@ var ViewModel = function() {
     	var request = {
             location: rome,
             radius: 1000,
-            types: ['store']
+            types: ['museum']
         };
         service = new google.maps.places.PlacesService(map);
         infowindow = new google.maps.InfoWindow();
@@ -119,14 +119,14 @@ var ViewModel = function() {
     //method for the place selected
     self.selectPlace = function (place) {
         if (place === self.chosenPlace()) {
-            self.displayInfo(place);
+            self.getWiki(place);
         } else {
             self.filteredPlaces().forEach(function (result) {
                 result.marker.setAnimation(null);
             });
             self.chosenPlace(place);
             place.marker.setAnimation(google.maps.Animation.BOUNCE);
-            self.displayInfo(place);
+            self.getWiki(place);
         }
     };
 
@@ -141,7 +141,7 @@ var ViewModel = function() {
         return 'fa fa-plus-square fa-2x fa-inverse'
     });
 
-    //cmethod for the toggle list of places
+    //method for the toggle list of places
     self.toggleListDisplay = function () {
         if (self.displayingList()) {
             self.displayingList(false);
@@ -151,7 +151,9 @@ var ViewModel = function() {
     };
 
     //method for display infoHtml
-    self.displayInfo = function (place) {
+    self.displayInfo = function (place, wikiContent) {
+
+        var content = '';
 
         var request = {
             placeId: place.place_id
@@ -162,6 +164,8 @@ var ViewModel = function() {
             var locStreet = '';
             var locCityState = '';
             var locPhone = '';
+            var wikiPage = '';
+
         
             if (status == google.maps.places.PlacesServiceStatus.OK) {
                 if (details.website) {
@@ -171,29 +175,73 @@ var ViewModel = function() {
                     locPhone = '<p>' + details.formatted_phone_number + '</p>';
                 }
                 if (details.formatted_address) {
-                    locStreet = '<p>' + self.getStreet(
-                        details.formatted_address) + '</p>';
-                    locCityState = '<p>' + self.getCityState(
-                        details.formatted_address) + '<p>';
+                    locStreet = '<p>' + self.getStreet(details.formatted_address) + '</p>';
+                    locCityState = '<p>' + self.getCityState(details.formatted_address) + '<p>';
                 } 
             }
-            var content = '<div class="streetview" id="street-view"></div><div class="infowindow">' + locName + locStreet + locCityState + locPhone + '</div>';
+
+            content = '<div class="streetview" id="street-view"></div>';
+            content = content + '<div>' + locName + locStreet + locCityState + locPhone + '</div>';
+            content = content + '<div></i>' + wikiContent + '</div>';
 
             infowindow.setContent(content);
             infowindow.open(map, place.marker);
 
             //get streetView from google and put inside infoHtml
+
+            
             var panorama = new google.maps.StreetViewPanorama(
                 document.getElementById('street-view'),
                 {
                     position: {lat: place.geometry.location.lat(), lng: place.geometry.location.lng()},
                     pov: {heading: 165, pitch: 0},
                     zoom: 1
-            });
-
+                }
+            );
+            
             //Movement for gmap
             map.panTo(place.marker.position);
         })
+    };
+
+
+    self.getWiki = function (place) {
+
+        var wikiTitle = '';
+        var wikiUrl = '';
+        var wikiContent = '';
+
+        var wikiUrl = "https://en.wikipedia.org//w/api.php?action=opensearch&search="+place.name+"&format=json&redirect=return&callback=wikiCallback";
+        
+        //Trigger for Timeout on wiki response
+        var wikiRequestTimeout = setTimeout(function(){
+            wikiContent = '<i class="fa fa-wikipedia-w fa-2x"></i> - Failed request to Wikipedia';
+            self.displayInfo(place,wikiContent);
+        },3000);
+        
+        $.ajax({
+            url: wikiUrl,
+            dataType: "jsonp"
+        })
+
+        .success( function(response) {
+
+            if (response[1].length === 1)
+            {
+                wikiTitle=response[1];
+                wikiUrl=response[3];
+                wikiContent = '<i class="fa fa-wikipedia-w fa-2x"></i> - <a href="' + wikiUrl + '" target="_blank">' + wikiTitle + '</a>';
+            }
+            else
+            {
+                wikiContent = '<i class="fa fa-wikipedia-w fa-2x"></i> - Wikipedia links not founded';
+            };
+
+            clearTimeout(wikiRequestTimeout);
+
+            self.displayInfo(place,wikiContent);
+
+        });
     };
 
     //main starter

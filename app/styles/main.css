@@ -17,6 +17,7 @@ body {
 
 p {
   font-size: 12px;
+  margin: 0;
 }
 
 li {
@@ -165,15 +166,9 @@ h4 {
   transition: 0.2s;
 }
 
-/* infoHtml block */
-.infowindow {
-  height: 110px;
-  width: 200px;
-}
-
 .streetview {
-  height: 200px;
-  width: 300px;
+  height: 150px;
+  width: 250px;
 }
 
 .small-list-toggle {
@@ -183,6 +178,7 @@ h4 {
 .list-view-hidden {
   transform: translateX(100%) !important;
 }
+
 
 /* Media Queries */
 @media (max-width: 450px) {
@@ -198,5 +194,8 @@ h4 {
     width: 75%;
     top: 5px;
     left: 5px;
+  }
+  .streetview {
+    display: none;
   }
 }
