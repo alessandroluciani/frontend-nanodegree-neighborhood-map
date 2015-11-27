@@ -166,6 +166,11 @@ h4 {
   transition: 0.2s;
 }
 
+.infowindow {
+  height: 100px;
+  width: 215px;
+}
+
 .streetview {
   height: 150px;
   width: 250px;
